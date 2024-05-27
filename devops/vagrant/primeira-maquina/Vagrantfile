@@ -1,0 +1,28 @@
+Vagrant.configure("2") do |config|
+  # Configuração da máquina virtual
+  config.vm.box = "hashicorp/bionic64"
+
+  # Configuração do provedor VirtualBox
+  config.vm.provider "virtualbox" do |v|
+    v.name = "primeira-maquina"
+    v.memory = 2048
+    v.cpus = 2
+  end
+
+  # Configuração de rede em modo bridge
+  config.vm.network "public_network"
+
+  # Configuração de porta encaminhada
+  config.vm.network "forwarded_port", guest: 80, host: 8090
+
+  # Sincronização de pastas
+  config.vm.synced_folder "site/", "/var/www/html"
+
+  # Provisionamento usando script de shell
+  config.vm.provision "shell", path: "script.sh"
+
+  # Provisionamento usando Ansible
+  config.vm.provision "ansible" do |ansible|
+    ansible.playbook = "playbook.yml"
+  end
+end
