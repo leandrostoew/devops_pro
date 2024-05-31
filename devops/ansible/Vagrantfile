@@ -1,0 +1,24 @@
+Vagrant.configure("2") do |config|
+  # Configuração para o servidor Debian
+  config.vm.define "debian" do |debian|
+    debian.vm.box = "debian/buster64"  # Use a box Debian Buster 64-bit
+    debian.vm.hostname = "debian-server"
+    debian.vm.network "public_network", bridge: "wlp3s0"  # Define rede pública usando wlp3s0
+    debian.vm.provider "virtualbox" do |vb|
+      vb.memory = "1024"  # Ajuste para 1024 MB de memória
+      vb.cpus = 1
+    end
+  end
+
+  # Configuração para o servidor CentOS
+  config.vm.define "centos" do |centos|
+    centos.vm.box = "centos/7"  # Use a box CentOS 7
+    centos.vm.hostname = "centos-server"
+    centos.vm.network "public_network", bridge: "wlp3s0"  # Define rede pública usando wlp3s0
+    centos.vm.provider "virtualbox" do |vb|
+      vb.memory = "1024"  # Ajuste para 1024 MB de memória
+      vb.cpus = 1
+    end
+  end
+end
+

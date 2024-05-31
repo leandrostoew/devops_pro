@@ -1,0 +1,9 @@
+---
+- name: Instalando pacotes essencias
+  apt:
+    name: 
+      - vim
+      - net-tools
+      - telnet
+      - nmap
+    state: present

@@ -1,0 +1,37 @@
+---
+- name: Instalando Nginx
+  apt: 
+    name: nginx 
+    state: latest
+
+- name: Removendo configurações padrão duplicadas do Nginx
+  file: 
+    path: /etc/nginx/sites-enabled/default 
+    state: absent
+
+- name: Copiando arquivo de configuração
+  copy: 
+    src: default.conf 
+    dest: /etc/nginx/conf.d/
+
+- name: Copiando index.html
+  template: 
+    src: index.html 
+    dest: /var/www/html
+
+- name: Verificando a sintaxe do arquivo de configuração do Nginx
+  command: nginx -t
+  register: nginx_test
+  changed_when: false
+
+- name: Mostrando resultado da verificação do Nginx
+  debug:
+    var: nginx_test.stdout_lines
+
+- name: Iniciando serviço
+  service: 
+    name: nginx 
+    state: restarted
+  when: nginx_test.rc == 0
+...
+

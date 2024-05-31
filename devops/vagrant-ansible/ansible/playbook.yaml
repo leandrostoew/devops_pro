@@ -1,0 +1,31 @@
+
+- hosts: all
+  become: true
+  tasks:
+    - name: Set hostname
+      hostname:
+        name: "{{ inventory_hostname }}"
+
+    - name: Create user leandro
+      user:
+        name: leandro
+        state: present
+        groups: sudo
+
+    - name: Create directory for Nginx HTML files
+      file:
+        path: /var/www/html
+        state: directory
+        owner: www-data
+        group: www-data
+        mode: '0755'
+
+    - name: Copy index.html to Nginx HTML directory
+      copy:
+        src: common/index.html
+        dest: /var/www/html/index.html
+        owner: www-data
+        group: www-data
+        mode: '0644'
+
+    - include_tasks: nginx/tasks/main.yaml

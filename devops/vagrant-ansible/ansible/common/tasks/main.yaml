@@ -1,0 +1,75 @@
+---
+- name: update cache
+  apt:
+    update_cache: true
+
+- name: update so
+  apt:
+    name: "*"
+    state: latest
+
+- name: Instalando vim
+  apt:
+    name: vim
+    state: latest
+
+- name: Instalando curl
+  apt:
+    name: curl
+    state: latest
+
+- name: Instalando telnet
+  apt:
+    name: telnet
+    state: latest
+
+- name: Instalando unzip
+  apt:
+    name: unzip
+    state: latest
+
+- name: Instalando wget
+  apt:
+    name: wget
+    state: latest
+
+- name: Instalando net-tools
+  apt:
+    name: net-tools
+    state: latest
+
+- name: Instalando htop
+  apt:
+    name: htop
+    state: latest
+
+- name: Instalando nmap
+  apt:
+    name: nmap
+    state: latest
+
+- name: Definir o nome da máquina
+  hostname:
+    name: "vagrant-ansible"
+
+- name: Criar usuário com meu nome
+  user:
+    name: "leandro"
+    comment: "Usuário criado pelo Ansible"
+    shell: /bin/bash
+    groups: "sudo"
+    state: present
+    createhome: true
+
+- name: Definir senha para o usuário
+  user:
+    name: "leandro"
+    password: "{{ '123456' | password_hash('sha512') }}"
+
+- name: Adicionar usuário ao sudoers
+  lineinfile:
+    path: /etc/sudoers
+    state: present
+    regexp: '^leandro'
+    line: 'leandro ALL=(ALL) NOPASSWD:ALL'
+    validate: 'visudo -cf %s'

@@ -1,0 +1,5 @@
+---
+# tasks file for squid
+- name: Instalando squid
+  apt: name=squid state=present
+  notify: Restart squid

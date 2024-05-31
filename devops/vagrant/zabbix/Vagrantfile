@@ -1,0 +1,56 @@
+# Vagrantfile para configurar Zabbix 7 em uma VM Ubuntu 20.04
+Vagrant.configure("2") do |config|
+  config.vm.box = "ubuntu/focal64"
+
+  config.vm.network "private_network", type: "dhcp"
+
+  config.vm.provider "virtualbox" do |vb|
+    vb.memory = "2048"
+    vb.cpus = 2
+  end
+
+  config.vm.provision "shell", inline: <<-SHELL
+    # Atualiza o sistema
+    sudo apt-get update
+    sudo apt-get -y upgrade
+
+    # Instala dependências necessárias
+    sudo apt-get install -y wget gnupg2
+
+    # Adiciona o repositório do Zabbix 7
+    wget https://repo.zabbix.com/zabbix/7.0/ubuntu/pool/main/z/zabbix-release/zabbix-release_7.0-1+focal_all.deb
+    sudo dpkg -i zabbix-release_7.0-1+focal_all.deb
+    sudo apt-get update
+
+    # Instala o servidor e agente do Zabbix
+    sudo apt-get install -y zabbix-server-pgsql zabbix-frontend-php zabbix-agent postgresql
+
+    # Configura o PostgreSQL para o Zabbix
+    sudo -u postgres createuser --pwprompt zabbix
+    sudo -u postgres createdb -O zabbix zabbix
+
+    # Importe o esquema do banco de dados para o PostgreSQL
+    zcat /usr/share/doc/zabbix-server-pgsql*/create.sql.gz | sudo -u postgres psql zabbix
+
+    # Configura o arquivo zabbix_server.conf
+    sudo sed -i 's/# DBPassword=/DBPassword=zabbix_password/' /etc/zabbix/zabbix_server.conf
+    sudo sed -i 's/# DBName=/DBName=zabbix/' /etc/zabbix/zabbix_server.conf
+    sudo sed -i 's/# DBUser=/DBUser=zabbix/' /etc/zabbix/zabbix_server.conf
+
+    # Reinicia e habilita o servidor Zabbix e o agente
+    sudo systemctl restart zabbix-server zabbix-agent apache2
+    sudo systemctl enable zabbix-server zabbix-agent apache2
+
+    # Configura o PHP para o Zabbix
+    sudo sed -i 's/post_max_size = 8M/post_max_size = 16M/' /etc/php/7.4/apache2/php.ini
+    sudo sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 16M/' /etc/php/7.4/apache2/php.ini
+    sudo sed -i 's/max_execution_time = 30/max_execution_time = 300/' /etc/php/7.4/apache2/php.ini
+    sudo sed -i 's/max_input_time = 60/max_input_time = 300/' /etc/php/7.4/apache2/php.ini
+    sudo sed -i 's/;date.timezone =/date.timezone = UTC/' /etc/php/7.4/apache2/php.ini
+
+    sudo systemctl restart apache2
+
+    echo "Zabbix instalado com sucesso. Acesse a interface web em http://localhost/zabbix"
+  SHELL
+end
+
