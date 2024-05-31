@@ -1,0 +1,46 @@
+---
+- hosts: all
+  become: true
+  tasks:
+    - name: Install Nginx
+      apt:
+        name: nginx
+        state: present
+
+    - name: Copy site.html
+      copy:
+        src: files/sites.html
+        dest: /var/www/html/site.html
+        owner: www-data
+        group: www-data
+        mode: '0644'
+
+    - name: Copy node_modules directory
+      copy:
+        src: files/node_modules
+        dest: /var/www/html/node_modules
+        owner: www-data
+        group: www-data
+        mode: '0644'
+
+    - name: Copy package.json
+      copy:
+        src: files/package.json
+        dest: /var/www/html/package.json
+        owner: www-data
+        group: www-data
+        mode: '0644'
+
+    - name: Copy package-lock.json
+      copy:
+        src: files/package-lock.json
+        dest: /var/www/html/package-lock.json
+        owner: www-data
+        group: www-data
+        mode: '0644'
+
+    - name: Start Nginx service
+      service:
+        name: nginx
+        state: started
+
