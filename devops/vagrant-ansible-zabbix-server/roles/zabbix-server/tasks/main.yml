@@ -1,0 +1,57 @@
+---
+- name: Add Zabbix repository
+  apt:
+    repo: "http://repo.zabbix.com/zabbix/5.0/ubuntu bionic main"
+    state: present
+
+- name: Update apt cache
+  apt:
+    update_cache: yes
+
+- name: Install Zabbix server and agent
+  apt:
+    name:
+      - zabbix-server-mysql
+      - zabbix-agent
+    state: present
+
+- name: Install MySQL server
+  apt:
+    name: mysql-server
+    state: present
+
+- name: Start and enable MySQL service
+  systemd:
+    name: mysql
+    enabled: yes
+    state: started
+
+- name: Create Zabbix database
+  mysql_db:
+    name: zabbix
+    state: present
+
+- name: Create Zabbix database user
+  mysql_user:
+    name: zabbix
+    password: "zabbix_password"
+    priv: "zabbix.*:ALL"
+    state: present
+
+- name: Configure Zabbix server database connection
+  lineinfile:
+    path: /etc/zabbix/zabbix_server.conf
+    regexp: '^# DBPassword='
+    line: 'DBPassword=zabbix_password'
+
+- name: Start and enable Zabbix server
+  systemd:
+    name: zabbix-server
+    enabled: yes
+    state: started
+
+- name: Start and enable Zabbix agent
+  systemd:
+    name: zabbix-agent
+    enabled: yes
+    state: started

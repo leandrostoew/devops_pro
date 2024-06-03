@@ -1,0 +1,9 @@
+Vagrant.configure("2") do |config|
+  config.vm.box = "ubuntu/bionic64"
+  config.vm.network "public_network", bridge: "wlp3s0", ip: "192.168.0.14"
+  config.vm.hostname = "zabbix-agent"
+  config.vm.provision "ansible" do |ansible|
+    ansible.playbook = "playbook.yml"
+  end
+end
+

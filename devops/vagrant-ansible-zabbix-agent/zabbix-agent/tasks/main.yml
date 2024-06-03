@@ -1,0 +1,26 @@
+---
+- name: Add Zabbix repository key
+  apt_key:
+    url: "https://repo.zabbix.com/zabbix-official-repo.key"
+    state: present
+
+- name: Add Zabbix repository
+  apt_repository:
+    repo: "deb http://repo.zabbix.com/zabbix/5.0/ubuntu bionic main"
+    state: present
+
+- name: Update apt cache
+  apt:
+    update_cache: yes
+
+- name: Install Zabbix Agent
+  apt:
+    name: zabbix-agent
+    state: present
+  notify: restart zabbix-agent
+
+- name: Configure Zabbix Agent
+  template:
+    src: zabbix_agentd.conf.j2
+    dest: /etc/zabbix/zabbix_agentd.conf
+  notify: restart zabbix-agent

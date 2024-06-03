@@ -1,0 +1,19 @@
+# roles/mysql/tasks/main.yml
+- name: Update apt cache
+  apt: 
+    update_cache: yes
+
+- name: Install MySQL server
+  apt: 
+    name: mysql-server
+    state: present
+
+- name: Set MySQL root password
+  command: mysqladmin -u root password "{{ mysql_root_password }}"
+  ignore_errors: yes
+
+- name: Ensure MySQL service is running
+  service:
+    name: mysql
+    state: started
+    enabled: yes
