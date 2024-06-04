@@ -1,7 +1,8 @@
 Formação DevOps
-Bem-vindo à Formação DevOps! Este projeto é destinado a ajudar você a planejar seus estudos e iniciar ou fazer a transição para a área de Cloud/DevOps. Aqui, montaremos um plano de estudos personalizado e acompanharemos seu processo de aprendizado das principais ferramentas e tecnologias do setor.
 
-Conteúdo do Curso
+Bem-vindo à Formação DevOps! Este projeto é destinado a ajudar você a planejar seus estudos e iniciar ou fazer a transição para a área de Cloud/DevOps. Montaremos um plano de estudos personalizado e acompanharemos seu processo de aprendizado das principais ferramentas e tecnologias do setor.
+
+📚 Conteúdo do Curso
 Na Formação DevOps, você terá acesso ao aprendizado das seguintes ferramentas e tecnologias:
 
 GitHub: Controle de versão e colaboração em projetos.
@@ -10,7 +11,8 @@ Ansible: Automação de provisionamento e configuração de infraestrutura.
 Docker: Contêineres para empacotamento e distribuição de aplicações.
 AWS: Serviços de computação em nuvem da Amazon.
 Pipeline: Implementação de CI/CD para automação de deploy.
-Estrutura do Curso
+
+🗂 Estrutura do Curso
 Introdução ao DevOps
 
 Fundamentos de DevOps
