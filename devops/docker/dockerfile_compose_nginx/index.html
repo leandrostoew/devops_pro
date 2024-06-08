@@ -1,0 +1,176 @@
+<!DOCTYPE HTML>
+<html lang="pt-br">
+<head>
+<title>ViaCEP - Webservice CEP e IBGE gratuito</title>
+<meta name="keywords" content="webservice, gratuito, gratis, cep, ibge, gia, ddd, siafi, json, xml, query, piped, endereco, busca cep, correios, pesquisa cep, consulta cep, ajax, serviço"/>
+<meta name="description" content="Webservice gratuito para consulta de endereço via CEP, suporta Ajax e retorno nos formatos JSON ou XML."/>
+<meta name="rating" content="General"/>
+<meta name="revisit-after" content="7"/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anek+Malayalam&display=swap" rel="stylesheet">
+<meta name="google-site-verification" content="UcBPI0QtVFtvB4gxAwjk8ncJuFI5Un5AozPW5yjiNiM"/>
+<link href="/estatico/css/A.viacep.css.pagespeed.cf.0_tFigRmaA.css" rel="stylesheet" type="text/css" media="screen"/>
+<style type="text/css">input{margin-bottom:10px}</style>
+<link href="/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
+<link rel="dns-prefetch" href="//code.jquery.com"><link rel="dns-prefetch" href="//www.googletagmanager.com"></head>
+<body>
+<div id="topo">
+<div class="titulo1">
+<a href="/">
+<img src="/estatico/images/viacep.png.pagespeed.ce.I80LiA6qpr.png" alt="ViaCEP"/>
+</a>
+</div>
+<div class="titulo2">
+Consulte CEPs de todo o Brasil
+</div>
+</div>
+<div id="barra"></div>
+<div id="conteudo">
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script>$(document).ready(function(){function limpa_formulário_cep(){$("#rua").val("");$("#bairro").val("");$("#cidade").val("");$("#uf").val("");$("#ibge").val("");}$("#cep").blur(function(){var cep=$(this).val().replace(/\D/g,'');if(cep!=""){var validacep=/^[0-9]{8}$/;if(validacep.test(cep)){$("#rua").val("...");$("#bairro").val("...");$("#cidade").val("...");$("#uf").val("...");$("#ibge").val("...");$.getJSON("https://viacep.com.br/ws/"+cep+"/json/?callback=?",function(dados){if(!("erro"in dados)){$("#rua").val(dados.logradouro);$("#bairro").val(dados.bairro);$("#cidade").val(dados.localidade);$("#uf").val(dados.uf);$("#ibge").val(dados.ibge);}else{limpa_formulário_cep();alert("CEP não encontrado.");}});}else{limpa_formulário_cep();alert("Formato de CEP inválido.");}}else{limpa_formulário_cep();}});});</script>
+<h3>Informe o CEP</h3>
+<p>Digite o CEP e ao sair o campo o endereço será completado.
+Pode utilizar a tecla TAB após digitar o CEP.</p>
+<form id="formulario-contato" method="get" action="#">
+<label>Cep:
+<input name="cep" type="text" id="cep" value="" size="10" maxlength="9"/></label><br/>
+<label>Rua:
+<input name="rua" type="text" id="rua" size="60"/></label><br/>
+<label>Bairro:
+<input name="bairro" type="text" id="bairro" size="40"/></label><br/>
+<label>Cidade:
+<input name="cidade" type="text" id="cidade" size="40"/></label><br/>
+<label>Estado:
+<input name="uf" type="text" id="uf" size="2"/></label><br/>
+<label>IBGE:
+<input name="ibge" type="text" id="ibge" size="8"/></label><br/>
+</form>
+<h3>Código Fonte (Jquery e Json)</h3>
+<pre><code>
+    &lt;html&gt;
+    &lt;head&gt;
+    &lt;title&gt;ViaCEP Webservice&lt;/title&gt;
+    &lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=utf-8&quot; /&gt;
+
+    &lt;!-- Adicionando JQuery --&gt;
+    &lt;script src=&quot;https://code.jquery.com/jquery-3.7.1.min.js&quot;
+            integrity=&quot;sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=&quot;
+            crossorigin=&quot;anonymous&quot;&gt;&lt;/script&gt;
+
+    &lt;!-- Adicionando Javascript --&gt;
+    &lt;script&gt;
+
+        $(document).ready(function() {
+
+            function limpa_formul&aacute;rio_cep() {
+                // Limpa valores do formul&aacute;rio de cep.
+                $(&quot;#rua&quot;).val(&quot;&quot;);
+                $(&quot;#bairro&quot;).val(&quot;&quot;);
+                $(&quot;#cidade&quot;).val(&quot;&quot;);
+                $(&quot;#uf&quot;).val(&quot;&quot;);
+                $(&quot;#ibge&quot;).val(&quot;&quot;);
+            }
+            
+            //Quando o campo cep perde o foco.
+            $(&quot;#cep&quot;).blur(function() {
+
+                //Nova vari&#225;vel &quot;cep&quot; somente com d&#237;gitos.
+                var cep = $(this).val().replace(/\D/g, '');
+
+                //Verifica se campo cep possui valor informado.
+                if (cep != &quot;&quot;) {
+
+                    //Express&atilde;o regular para validar o CEP.
+                    var validacep = /^[0-9]{8}$/;
+
+                    //Valida o formato do CEP.
+                    if(validacep.test(cep)) {
+
+                        //Preenche os campos com &quot;...&quot; enquanto consulta webservice.
+                        $(&quot;#rua&quot;).val(&quot;...&quot;);
+                        $(&quot;#bairro&quot;).val(&quot;...&quot;);
+                        $(&quot;#cidade&quot;).val(&quot;...&quot;);
+                        $(&quot;#uf&quot;).val(&quot;...&quot;);
+                        $(&quot;#ibge&quot;).val(&quot;...&quot;);
+
+                        //Consulta o webservice viacep.com.br/
+                        $.getJSON(&quot;https://viacep.com.br/ws/&quot;+ cep +&quot;/json/?callback=?&quot;, function(dados) {
+
+                            if (!(&quot;erro&quot; in dados)) {
+                                //Atualiza os campos com os valores da consulta.
+                                $(&quot;#rua&quot;).val(dados.logradouro);
+                                $(&quot;#bairro&quot;).val(dados.bairro);
+                                $(&quot;#cidade&quot;).val(dados.localidade);
+                                $(&quot;#uf&quot;).val(dados.uf);
+                                $(&quot;#ibge&quot;).val(dados.ibge);
+                            } //end if.
+                            else {
+                                //CEP pesquisado n&atilde;o foi encontrado.
+                                limpa_formul&aacute;rio_cep();
+                                alert(&quot;CEP n&atilde;o encontrado.&quot;);
+                            }
+                        });
+                    } //end if.
+                    else {
+                        //cep &eacute; inv&aacute;lido.
+                        limpa_formul&aacute;rio_cep();
+                        alert(&quot;Formato de CEP inv&aacute;lido.&quot;);
+                    }
+                } //end if.
+                else {
+                    //cep sem valor, limpa formul&aacute;rio.
+                    limpa_formul&aacute;rio_cep();
+                }
+            });
+        });
+
+    &lt;/script&gt;
+    &lt;/head&gt;
+
+    &lt;body&gt;
+    &lt;!-- Inicio do formulario --&gt;
+      &lt;form method=&quot;get&quot; action=&quot;.&quot;&gt;
+        &lt;label&gt;Cep:
+        &lt;input name=&quot;cep&quot; type=&quot;text&quot; id=&quot;cep&quot; value=&quot;&quot; size=&quot;10&quot; maxlength=&quot;9&quot; /&gt;&lt;/label&gt;&lt;br /&gt;
+        &lt;label&gt;Rua:
+        &lt;input name=&quot;rua&quot; type=&quot;text&quot; id=&quot;rua&quot; size=&quot;60&quot; /&gt;&lt;/label&gt;&lt;br /&gt;
+        &lt;label&gt;Bairro:
+        &lt;input name=&quot;bairro&quot; type=&quot;text&quot; id=&quot;bairro&quot; size=&quot;40&quot; /&gt;&lt;/label&gt;&lt;br /&gt;
+        &lt;label&gt;Cidade:
+        &lt;input name=&quot;cidade&quot; type=&quot;text&quot; id=&quot;cidade&quot; size=&quot;40&quot; /&gt;&lt;/label&gt;&lt;br /&gt;
+        &lt;label&gt;Estado:
+        &lt;input name=&quot;uf&quot; type=&quot;text&quot; id=&quot;uf&quot; size=&quot;2&quot; /&gt;&lt;/label&gt;&lt;br /&gt;
+        &lt;label&gt;IBGE:
+        &lt;input name=&quot;ibge&quot; type=&quot;text&quot; id=&quot;ibge&quot; size=&quot;8&quot; /&gt;&lt;/label&gt;&lt;br /&gt;
+      &lt;/form&gt;
+    &lt;/body&gt;
+
+    &lt;/html&gt;
+    </code></pre>
+</div>
+<div id="footer">
+<a href="/faleconosco/">Fale Conosco - ViaCEP</a>
+<br/>
+<a href="https://nubank.com.br/pagar/33gza/alHZSi6E5K" target="_blank">
+<img src="/estatico/images/bt_doar_pix.png.pagespeed.ce.3xD2cQahH2.png" class="donatebutton" alt="PIX"/>
+</a>
+<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
+<input type="hidden" name="cmd" value="_s-xclick"/>
+<input type="hidden" name="hosted_button_id" value="V7G5BB25AAW4L"/>
+<input type="image" src="/estatico/images/paypal.png.pagespeed.ce.JV2L7As_Be.png" name="submit" class="donatebutton" alt="PayPal - A maneira fácil e segura de enviar pagamentos online!"/>
+</form>
+<br/>
+<span class="atencao">
+Atenção: Uso massivo para
+validação de bases de dados locais,
+poderá automaticamente bloquear seu
+acesso por tempo indeterminado.
+<br/>
+Não distribuímos ou comercializamos bases de dados.
+</span>
+</div>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-C6MF78Y06D"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-C6MF78Y06D');</script>
+</body>
+</html>
