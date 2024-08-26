@@ -1,19 +1,21 @@
 name: CI-CD
+
 on: 
   push:
     branches: ["main"]
-  workflow_dispach:
+  workflow_dispatch:
 
 jobs:
   CI:
     runs-on: ubuntu-latest
     steps:
       - name: Passo 01
-        run: echo "Execucao do Build da imagem"
+        run: echo "Execução do Build da imagem"
       - name: Passo 02
-        run: echo "Execucao do push da imagem"
+        run: echo "Execução do push da imagem"
+
   CD:
     runs-on: ubuntu-latest
     steps:
       - name: Passo 01
-        run: echo "Execucao do Deploy"
+        run: echo "Execução do Deploy"
