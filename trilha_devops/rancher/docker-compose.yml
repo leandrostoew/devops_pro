@@ -1,0 +1,42 @@
+version: '3'
+services:
+  rancher:
+    image: rancher/rancher:v2.7.5
+    container_name: rancher
+    privileged: true
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /opt/rancher:/var/lib/rancher
+    networks:
+      rancher_net:
+        ipv4_address: 192.168.1.101
+
+  worker1:
+    image: ubuntu:22.04
+    container_name: worker1
+    privileged: true
+    restart: unless-stopped
+    networks:
+      rancher_net:
+        ipv4_address: 192.168.1.102
+
+  extras:
+    image: ubuntu:22.04
+    container_name: extras
+    privileged: true
+    restart: unless-stopped
+    networks:
+      rancher_net:
+        ipv4_address: 192.168.1.104
+    command: >
+      bash -c "apt-get update && apt-get install -y bind9 && service bind9 start"
+
+networks:
+  rancher_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.1.0/24
